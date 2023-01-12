@@ -14,11 +14,25 @@ const db = mysql.createConnection(
     console.log(`Connected to the ${process.env.DB_NAME} database.`)
 );
 
-const viewEmployees = () => {
-    db.query('SELECT * FROM employee', function (err, results) {
+// DB view queries
+const viewTable = (employeeTable) => {
+    db.query(`SELECT * FROM ${employeeTable}`, function(err, results) {
+        const table = cTable.getTable(results);
+        console.info(table);
+    });
+}
+
+const viewByManager = (manager) => {
+    db.query(`SELECT * FROM employee WHERE manager_id = ${manager}`, function(err, results) {
         const table = cTable.getTable(results);
         console.info(table);
     });
 };
 
-module.exports = viewEmployees;
+// DB adds
+
+// DB updates
+
+// DB deletes
+
+module.exports = {viewTable, viewByManager};

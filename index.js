@@ -1,7 +1,7 @@
 // *****Load modules*****
 const inquirer = require('inquirer');
 require('dotenv').config();
-const viewEmployees = require('./utils/db-utilites');
+const { viewTable, viewByManager } = require('./utils/db-utilites');
 
 // *****Global variables*****
 const PORT = process.env.PORT || 3001;
@@ -57,8 +57,8 @@ const menuPrompt = [
 async function menu () {
     const answer = await inquirer.prompt(menuPrompt);
 
-    viewEmployees();
-
+    //viewTable('department');
+    viewByManager(7);
 };
 
 menu();
