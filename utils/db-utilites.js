@@ -50,10 +50,8 @@ const getRoles = () => {
     return query;
 };
 
-// TODO - filter managers by department
-// TODO - Filter by management roles
 const getManagers = () => {
-    let query = db.promise().query(`SELECT id AS value, CONCAT(employee.first_name,' ',employee.last_name) AS name FROM employee`);
+    let query = db.promise().query(`SELECT employee.id AS value, CONCAT(employee.first_name,' ',employee.last_name) AS name FROM employee JOIN role ON employee.role_id = role.id WHERE role.management = 1`);
     return query;
 };
 
