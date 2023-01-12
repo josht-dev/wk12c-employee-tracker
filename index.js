@@ -1,7 +1,6 @@
 // *****Load modules*****
 const inquirer = require('inquirer');
 const cTable = require('console.table');
-require('dotenv').config();
 const { 
     viewTable, 
     getDepartments, 
