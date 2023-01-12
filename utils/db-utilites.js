@@ -1,6 +1,5 @@
 // *****Load modules*****
 const mysql = require('mysql2');
-const cTable = require('console.table');
 require('dotenv').config();
 
 // Database connection
@@ -23,10 +22,10 @@ const viewTable = (dbTable) => {
             queryStr = 
                 `SELECT employee.id, CONCAT(employee.first_name,' ',employee.last_name) AS full_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name,' ',manager.last_name) AS manager FROM employee LEFT OUTER JOIN employee manager ON employee.manager_id = manager.id JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id`;
             break;
-        case 'role':
+        case 'roles':
             queryStr = 'SELECT * FROM role';
             break;
-        case 'department':
+        case 'departments':
             queryStr = 'SELECT * FROM department';
         /*case 'manager':
             queryStr = `SELECT * FROM employee WHERE manager_id = ${dbTable}`;
@@ -36,10 +35,8 @@ const viewTable = (dbTable) => {
             break;
     }
 
-    db.query(queryStr, function(err, results) {
-        const table = cTable.getTable(results);
-        console.info(table);
-    });
+    let query = db.promise().query(queryStr);
+    return query;
 }
 
 // DB get data values

@@ -1,5 +1,6 @@
 // *****Load modules*****
 const inquirer = require('inquirer');
+const cTable = require('console.table');
 require('dotenv').config();
 const { viewTable, getDepartments, getRoles, getManagers } = require('./utils/db-utilites');
 
@@ -22,6 +23,26 @@ const getChoices = async (type) => {
             break;
     }
     return val[0];
+}
+
+const viewChoices = async (type) => {
+    let val = '';
+    switch (type) {
+        case 'employees':
+            val = await viewTable(type);
+            break;
+        case 'departments':
+            val = await viewTable(type);
+            break;
+        case 'roles':
+            val = await viewTable(type);
+            break;
+        default:
+            break;
+    }
+    let table = cTable.getTable(val[0]);
+    console.info('\n' + table);
+    return;
 }
 
 // Menu prompt for inquirer package
@@ -169,7 +190,8 @@ async function menu () {
         // Check user's choices
         switch (answer.menuSelect) {
             case 'viewEmployees':
-                viewTable('employees');
+                await viewChoices('employees');
+                //console.info(table);
                 break;
             case 'addEmployee':
                 return 'addEmployee';
@@ -178,13 +200,13 @@ async function menu () {
                 return 'updateRole';
                 break;
             case 'viewRoles':
-                viewTable('roles');
+                await viewChoices('roles');
                 break;
             case 'addRole':
                 return 'addRole';
                 break;
             case 'viewDepartments':
-                viewTable('departments');
+                await viewChoices('departments');
                 break;
             case 'addDepartment':
                 return 'addDepartment';
