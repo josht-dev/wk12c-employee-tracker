@@ -2,11 +2,21 @@
 const inquirer = require('inquirer');
 const cTable = require('console.table');
 require('dotenv').config();
-const { viewTable, getDepartments, getRoles, getManagers } = require('./utils/db-utilites');
+const { 
+    viewTable, 
+    getDepartments, 
+    getRoles, 
+    getManagers, 
+    addDepartment,
+    addRole,
+    addEmployee
+ } = require('./utils/db-utilites');
 
 // *****Global variables*****
 const PORT = process.env.PORT || 3001;
 
+
+// Functions for db interaction
 const getChoices = async (type) => {
     let val = '';
     switch (type) {
@@ -24,7 +34,6 @@ const getChoices = async (type) => {
     }
     return val[0];
 }
-
 const viewChoices = async (type) => {
     let val = '';
     switch (type) {
@@ -43,6 +52,22 @@ const viewChoices = async (type) => {
     let table = cTable.getTable(val[0]);
     console.info('\n' + table);
     return;
+}
+const setChoices = async (type, answers) => {
+    let val = '';
+    switch (type) {
+        case 'department':
+            val = await addDepartment(answers.departmentName);
+            break;
+        case 'role':
+            val = await addRole(answers.roleTitle, answers.roleSalary, answers.roleDepartment);
+            break;
+        case 'employee':
+            val = await addEmployee(answers.employeeFirstName, answers.employeeLastName, answers.employeeTitle, answers.employeeManager);
+            break;
+        default:
+            break;
+    }
 }
 
 // Menu prompt for inquirer package
@@ -194,7 +219,7 @@ async function menu () {
                 //console.info(table);
                 break;
             case 'addEmployee':
-                return 'addEmployee';
+                await setChoices('employee', answer);
                 break;
             case 'updateRole':
                 return 'updateRole';
@@ -203,13 +228,13 @@ async function menu () {
                 await viewChoices('roles');
                 break;
             case 'addRole':
-                return 'addRole';
+                await setChoices('role', answer);
                 break;
             case 'viewDepartments':
                 await viewChoices('departments');
                 break;
             case 'addDepartment':
-                return 'addDepartment';
+                await setChoices('department', answer);
                 break;
             default:
                 // User is finished
@@ -221,3 +246,4 @@ async function menu () {
 };
 
 menu();
+//addDepartment("test2");

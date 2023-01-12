@@ -50,12 +50,27 @@ const getRoles = () => {
     return query;
 };
 
+// TODO - filter managers by department
 const getManagers = () => {
     let query = db.promise().query(`SELECT id AS value, CONCAT(employee.first_name,' ',employee.last_name) AS name FROM employee`);
     return query;
 };
 
 // DB adds
+const addDepartment = (name) => {
+    let query = db.promise().query(`INSERT INTO department(name) VALUES ("${name}")`);
+    return;
+}
+
+const addRole = (title, salary, department) => {
+    let query = db.promise().query(`INSERT INTO role(title, salary, department_id) VALUES ("${title}", "${salary}", "${department}")`);
+    return;
+}
+
+const addEmployee = (firstName, lastName, role, manager) => {
+    let query = db.promise().query(`INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES ("${firstName}", "${lastName}", "${role}", "${manager}")`);
+    return;
+}
 
 // DB updates
 
@@ -65,5 +80,8 @@ module.exports = {
     viewTable,
     getDepartments,
     getRoles,
-    getManagers
+    getManagers,
+    addDepartment,
+    addRole,
+    addEmployee
 };
