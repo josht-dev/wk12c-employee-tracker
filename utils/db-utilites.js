@@ -23,11 +23,16 @@ const viewTable = (dbTable) => {
             queryStr = 
                 `SELECT employee.id, CONCAT(employee.first_name,' ',employee.last_name) AS full_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name,' ',manager.last_name) AS manager FROM employee LEFT OUTER JOIN employee manager ON employee.manager_id = manager.id JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id`;
             break;
-        case 'manager':
+        case 'role':
+            queryStr = 'SELECT * FROM role';
+            break;
+        case 'department':
+            queryStr = 'SELECT * FROM department';
+        /*case 'manager':
             queryStr = `SELECT * FROM employee WHERE manager_id = ${dbTable}`;
             break;
+        */
         default:
-            queryStr = `SELECT * FROM ${dbTable}`;
             break;
     }
 
