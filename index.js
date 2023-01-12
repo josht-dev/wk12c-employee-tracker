@@ -157,12 +157,20 @@ const menuPrompt = [
 
 // *****Run code at load*****
 
+// Display the menu to the user
 async function menu () {
-    //const test = await getDepartments();
-    //console.info(test);
-    const answer = await inquirer.prompt(menuPrompt);
+    let quit = false;
 
-    //viewTable('employees');
+    // User prompts will continue till the user chooses to 'quit'
+    do {
+        // Prompt the user with the menu
+        let answer = await inquirer.prompt(menuPrompt);
+
+
+        // Check if user is done
+        if (answer.menuSelect === 'quit') {quit = true;}
+    } while (!quit);
+
 };
 
 menu();
