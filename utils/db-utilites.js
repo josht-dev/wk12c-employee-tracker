@@ -14,7 +14,7 @@ const db = mysql.createConnection(
     console.log(`Connected to the ${process.env.DB_NAME} database.`)
 );
 
-// DB view queries
+// DB view tables
 const viewTable = (dbTable) => {
     // Determine which SQL query string to use
     let queryStr = '';
@@ -42,10 +42,34 @@ const viewTable = (dbTable) => {
     });
 }
 
+// DB get data values
+const getDepartments = () => {
+    db.query('SELECT id, name FROM department', function(err, results) {
+        return results;
+    });
+};
+
+const getRoles = () => {
+    db.query('SELECT id, title AS name FROM role', function(err, results) {
+        return results;
+    });
+};
+
+const getManagers = () => {
+    db.query(`SELECT id, CONCAT(employee.first_name,' ',employee.last_name) AS name FROM employee`, function(err, results) {
+        return results;
+    });
+};
+
 // DB adds
 
 // DB updates
 
 // DB deletes
 
-module.exports = {viewTable};
+module.exports = {
+    viewTable,
+    getDepartments,
+    getRoles,
+    getManagers
+};
