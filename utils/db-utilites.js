@@ -43,22 +43,19 @@ const viewTable = (dbTable) => {
 }
 
 // DB get data values
-const getDepartments = () => {
-    db.query('SELECT id, name FROM department', function(err, results) {
-        return results;
-    });
+let getDepartments = () => {
+    let query = db.promise().query('SELECT name, id AS value FROM department');
+    return query;
 };
 
 const getRoles = () => {
-    db.query('SELECT id, title AS name FROM role', function(err, results) {
-        return results;
-    });
+    let query = db.promise().query('SELECT id AS value, title AS name FROM role');
+    return query;
 };
 
 const getManagers = () => {
-    db.query(`SELECT id, CONCAT(employee.first_name,' ',employee.last_name) AS name FROM employee`, function(err, results) {
-        return results;
-    });
+    let query = db.promise().query(`SELECT id AS value, CONCAT(employee.first_name,' ',employee.last_name) AS name FROM employee`);
+    return query;
 };
 
 // DB adds

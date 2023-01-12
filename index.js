@@ -5,6 +5,25 @@ const { viewTable, getDepartments, getRoles, getManagers } = require('./utils/db
 
 // *****Global variables*****
 const PORT = process.env.PORT || 3001;
+
+const getChoices = async (type) => {
+    let val = '';
+    switch (type) {
+        case 'departments':
+            val = await getDepartments();
+            break;
+        case 'roles':
+            val = await getRoles();
+            break;
+        case 'managers':
+            val = await getManagers();
+            break;
+        default:
+            break;
+    }
+    return val[0];
+}
+
 // Menu prompt for inquirer package
 const menuPrompt = [
     {
@@ -49,9 +68,7 @@ const menuPrompt = [
                     break;
             }
         }
-    }
-];
-const addPrompt = [
+    },
     {
         type: 'input',
         message: 'What is the name of the new department?',
@@ -77,11 +94,13 @@ const addPrompt = [
         }
     },
     {
-        // TODO - change this to a type: list, choice can take a function
         type: 'list',
         message: 'Which department uses the new role?',
         name: 'roleDepartment',
-        choices: getDepartments(),
+        choices: function (choices) {
+            choices = getChoices('departments');
+            return choices;
+        },
         when: function(answer) {
             return (answer.menuSelect === 'addRole') ? true : false;
         }
@@ -103,11 +122,13 @@ const addPrompt = [
         }
     },
     {
-        // TODO - change this to a type: list, choice can take a function
         type: 'list',
         message: "Employee's title:",
         name: 'employeeTitle',
-        choices: getRoles(),
+        choices: function (choices) {
+            choices = getChoices('roles');
+            return choices;
+        },
         when: function(answer) {
             return (answer.menuSelect === 'addEmployee') ? true : false;
         }
@@ -121,20 +142,24 @@ const addPrompt = [
         }
     },
     {
-        // TODO - change this to a type: list, choice can take a function
         type: 'list',
         message: "Select the employee's manager:",
         name: 'employeeManager',
-        choices: getManagers(),
+        choices: function (choices) {
+            choices = getChoices('managers');
+            return choices;
+        },
         when: function(answer) {
-            return (answer.menuSelect === 'employeeManaged') ? true : false;
+            return (answer.employeeManaged);
         }
     }
-]
+];
 
 // *****Run code at load*****
 
 async function menu () {
+    //const test = await getDepartments();
+    //console.info(test);
     const answer = await inquirer.prompt(menuPrompt);
 
     //viewTable('employees');
