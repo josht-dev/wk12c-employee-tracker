@@ -1,7 +1,7 @@
 // *****Load modules*****
 const inquirer = require('inquirer');
 require('dotenv').config();
-const { viewTable } = require('./utils/db-utilites');
+const { viewTable, getDepartments, getRoles, getManagers } = require('./utils/db-utilites');
 
 // *****Global variables*****
 const PORT = process.env.PORT || 3001;
@@ -78,9 +78,10 @@ const addPrompt = [
     },
     {
         // TODO - change this to a type: list, choice can take a function
-        type: 'input',
+        type: 'list',
         message: 'Which department uses the new role?',
         name: 'roleDepartment',
+        choices: getDepartments(),
         when: function(answer) {
             return (answer.menuSelect === 'addRole') ? true : false;
         }
@@ -103,9 +104,10 @@ const addPrompt = [
     },
     {
         // TODO - change this to a type: list, choice can take a function
-        type: 'input',
+        type: 'list',
         message: "Employee's title:",
         name: 'employeeTitle',
+        choices: getRoles(),
         when: function(answer) {
             return (answer.menuSelect === 'addEmployee') ? true : false;
         }
@@ -120,9 +122,10 @@ const addPrompt = [
     },
     {
         // TODO - change this to a type: list, choice can take a function
-        type: 'input',
+        type: 'list',
         message: "Select the employee's manager:",
         name: 'employeeManager',
+        choices: getManagers(),
         when: function(answer) {
             return (answer.menuSelect === 'employeeManaged') ? true : false;
         }
