@@ -51,7 +51,13 @@ const getRoles = () => {
 };
 
 // TODO - filter managers by department
+// TODO - Filter by management roles
 const getManagers = () => {
+    let query = db.promise().query(`SELECT id AS value, CONCAT(employee.first_name,' ',employee.last_name) AS name FROM employee`);
+    return query;
+};
+
+const getEmployees = () => {
     let query = db.promise().query(`SELECT id AS value, CONCAT(employee.first_name,' ',employee.last_name) AS name FROM employee`);
     return query;
 };
@@ -73,6 +79,10 @@ const addEmployee = (firstName, lastName, role, manager) => {
 }
 
 // DB updates
+const employeeRoleUpdate = (employeeId, newRole) => {
+    let query = db.promise().query(`UPDATE employee SET role_id = ${newRole} WHERE id = ${employeeId}`);
+    return;
+}
 
 // DB deletes
 
@@ -81,7 +91,9 @@ module.exports = {
     getDepartments,
     getRoles,
     getManagers,
+    getEmployees,
     addDepartment,
     addRole,
-    addEmployee
+    addEmployee,
+    employeeRoleUpdate
 };

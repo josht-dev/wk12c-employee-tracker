@@ -7,9 +7,11 @@ const {
     getDepartments, 
     getRoles, 
     getManagers, 
+    getEmployees,
     addDepartment,
     addRole,
-    addEmployee
+    addEmployee,
+    employeeRoleUpdate
  } = require('./utils/db-utilites');
 
 // *****Global variables*****
@@ -29,6 +31,8 @@ const getChoices = async (type) => {
         case 'managers':
             val = await getManagers();
             break;
+        case 'employees':
+            val = await getEmployees();
         default:
             break;
     }
@@ -68,6 +72,11 @@ const setChoices = async (type, answers) => {
         default:
             break;
     }
+}
+const updateEmployeeRole = async (answers) => {
+    let val = '';
+    val = await employeeRoleUpdate(answers.eUpdateName, answers.eUpdateRole);
+    return;
 }
 
 // Menu prompt for inquirer package
@@ -143,7 +152,7 @@ const menuPrompt = [
         type: 'list',
         message: 'Which department uses the new role?',
         name: 'roleDepartment',
-        choices: function (choices) {
+        choices: function(choices) {
             choices = getChoices('departments');
             return choices;
         },
@@ -171,7 +180,7 @@ const menuPrompt = [
         type: 'list',
         message: "Employee's title:",
         name: 'employeeTitle',
-        choices: function (choices) {
+        choices: function(choices) {
             choices = getChoices('roles');
             return choices;
         },
@@ -191,12 +200,36 @@ const menuPrompt = [
         type: 'list',
         message: "Select the employee's manager:",
         name: 'employeeManager',
-        choices: function (choices) {
+        choices: function(choices) {
             choices = getChoices('managers');
             return choices;
         },
         when: function(answer) {
             return (answer.employeeManaged);
+        }
+    },
+    {
+        type: 'list',
+        message: 'Select the employee to update:',
+        name: 'eUpdateName',
+        choices: function(choices) {
+            choices = getChoices('employees');
+            return choices;
+        },
+        when: function(answer) {
+            return (answer.menuSelect === 'updateRole');
+        }
+    },
+    {
+        type: 'list',
+        message: "Select the employee's new Role:",
+        name: 'eUpdateRole',
+        choices: function(choices) {
+            choices = getChoices('roles');
+            return choices;
+        },
+        when: function(answer) {
+            return (answer.menuSelect === 'updateRole');
         }
     }
 ];
@@ -222,7 +255,7 @@ async function menu () {
                 await setChoices('employee', answer);
                 break;
             case 'updateRole':
-                return 'updateRole';
+                await updateEmployeeRole(answer);
                 break;
             case 'viewRoles':
                 await viewChoices('roles');
@@ -246,4 +279,3 @@ async function menu () {
 };
 
 menu();
-//addDepartment("test2");
