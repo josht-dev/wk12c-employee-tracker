@@ -166,11 +166,36 @@ async function menu () {
         // Prompt the user with the menu
         let answer = await inquirer.prompt(menuPrompt);
 
-
-        // Check if user is done
-        if (answer.menuSelect === 'quit') {quit = true;}
+        // Check user's choices
+        switch (answer.menuSelect) {
+            case 'viewEmployees':
+                viewTable('employees');
+                break;
+            case 'addEmployee':
+                return 'addEmployee';
+                break;
+            case 'updateRole':
+                return 'updateRole';
+                break;
+            case 'viewRoles':
+                viewTable('roles');
+                break;
+            case 'addRole':
+                return 'addRole';
+                break;
+            case 'viewDepartments':
+                viewTable('departments');
+                break;
+            case 'addDepartment':
+                return 'addDepartment';
+                break;
+            default:
+                // User is finished
+                quit = true;
+                break;
+        }
     } while (!quit);
-
+    console.info('Good Bye! Have a wonderful rest of your day!');
 };
 
 menu();
