@@ -7,7 +7,7 @@ VALUES (001, "Engineering"),
 INSERT INTO role (id, title, salary, department_id, management)
 VALUES (001, "Sales Lead", 100000, 004, 1),
     (002, "Salesperson", 80000, 004, 0),
-    (003, "Lead Engineer", 150000, 001, 0),
+    (003, "Lead Engineer", 150000, 001, 1),
     (004, "Software Engineer", 120000, 001, 0),
     (005, "Account Manager", 160000, 002, 1),
     (006, "Accountant", 125000, 002, 0),
