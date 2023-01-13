@@ -87,7 +87,7 @@ const employeeRoleUpdate = (employeeId, newRole) => {
 }
 
 const eManagerUpdate = (employeeId, managerId) => {
-    let query = db.promise().query(`UPDATE employee SET manager_id = ${managerId} WHERE id = ${employeeId}`);
+    let query = db.promise().query(`UPDATE employee SET manager_id = IF(${managerId} <> 0, ${managerId}, NULL) WHERE id = ${employeeId}`);
     return;
 }
 
@@ -102,5 +102,6 @@ module.exports = {
     addDepartment,
     addRole,
     addEmployee,
-    employeeRoleUpdate
+    employeeRoleUpdate,
+    eManagerUpdate
 };

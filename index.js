@@ -10,7 +10,8 @@ const {
     addDepartment,
     addRole,
     addEmployee,
-    employeeRoleUpdate
+    employeeRoleUpdate,
+    eManagerUpdate
  } = require('./utils/db-utilites');
 
 // *****Global variables*****
@@ -77,6 +78,12 @@ const updateEmployeeRole = async (answers) => {
     val = await employeeRoleUpdate(answers.eUpdateName, answers.eUpdateRole);
     return;
 }
+const updateEmployeeManager = async (answers) => {
+    let val = '';
+    let managerId = (answers.newManager) ? answers.eUpdateManager : 0;
+    val = await eManagerUpdate(answers.eUpdateName, managerId);
+    return;
+}
 
 // Menu prompt for inquirer package
 const menuPrompt = [
@@ -88,6 +95,7 @@ const menuPrompt = [
             'View All Employees',
             'Add Employee',
             'Update Employee Role',
+            'Update Employee Manager',
             'View All Roles',
             'Add Role',
             'View All Departments',
@@ -116,6 +124,9 @@ const menuPrompt = [
                     break;
                 case 'Add Department':
                     return 'addDepartment';
+                    break;
+                case 'Update Employee Manager':
+                    return 'updateManager';
                     break;
                 default:
                     return 'quit';
@@ -238,6 +249,38 @@ const menuPrompt = [
         when: function(answer) {
             return (answer.menuSelect === 'updateRole');
         }
+    },
+    {
+        type: 'list',
+        message: 'Select the employee to update:',
+        name: 'eUpdateName',
+        choices: function(choices) {
+            choices = getChoices('employees');
+            return choices;
+        },
+        when: function(answer) {
+            return (answer.menuSelect === 'updateManager');
+        }
+    },
+    {
+        type: 'confirm',
+        message: 'Does this employee still have a Manager?',
+        name: 'newManager',
+        when: function(answer) {
+            return (answer.menuSelect === 'updateManager');
+        }
+    },
+    {
+        type: 'list',
+        message: "Select the employee's new Manager:",
+        name: 'eUpdateManager',
+        choices: function(choices) {
+            choices = getChoices('managers');
+            return choices;
+        },
+        when: function(answer) {
+            return (answer.newManager);
+        }
     }
 ];
 
@@ -275,6 +318,9 @@ async function menu () {
                 break;
             case 'addDepartment':
                 await setChoices('department', answer);
+                break;
+            case 'updateManager':
+                await updateEmployeeManager(answer);
                 break;
             default:
                 // User is finished
