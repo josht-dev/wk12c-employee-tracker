@@ -27,10 +27,7 @@ const viewTable = (dbTable) => {
             break;
         case 'departments':
             queryStr = 'SELECT * FROM department';
-        /*case 'manager':
-            queryStr = `SELECT * FROM employee WHERE manager_id = ${dbTable}`;
             break;
-        */
         default:
             break;
     }
