@@ -63,7 +63,7 @@ const setChoices = async (type, answers) => {
             val = await addDepartment(answers.departmentName);
             break;
         case 'role':
-            val = await addRole(answers.roleTitle, answers.roleSalary, answers.roleDepartment);
+            val = await addRole(answers.roleTitle, answers.roleSalary, answers.roleDepartment, answers.roleManagement);
             break;
         case 'employee':
             val = await addEmployee(answers.employeeFirstName, answers.employeeLastName, answers.employeeTitle, answers.employeeManager);
@@ -155,6 +155,14 @@ const menuPrompt = [
             choices = getChoices('departments');
             return choices;
         },
+        when: function(answer) {
+            return (answer.menuSelect === 'addRole') ? true : false;
+        }
+    },
+    {
+        type: 'confirm',
+        message: 'Is this a Management role?',
+        name: 'roleManagement',
         when: function(answer) {
             return (answer.menuSelect === 'addRole') ? true : false;
         }

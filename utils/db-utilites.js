@@ -66,19 +66,28 @@ const addDepartment = (name) => {
     return;
 }
 
-const addRole = (title, salary, department) => {
-    let query = db.promise().query(`INSERT INTO role(title, salary, department_id) VALUES ("${title}", "${salary}", "${department}")`);
+const addRole = (title, salary, department, management) => {
+    management = (management) ? 0 : 1;
+    let query = db.promise().query(`INSERT INTO role(title, salary, department_id, management) VALUES ("${title}", ${salary}, "${department}", ${management})`);
     return;
 }
 
 const addEmployee = (firstName, lastName, role, manager) => {
-    let query = db.promise().query(`INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES ("${firstName}", "${lastName}", "${role}", "${manager}")`);
+    if (!manager) {
+        manager = 0;
+    }
+    db.promise().query(`INSERT INTO employee(first_name, last_name, role_id, manager_id) VALUES ("${firstName}", "${lastName}", ${role}, IF(${manager}, ${manager}, NULL))`);
     return;
 }
 
 // DB updates
 const employeeRoleUpdate = (employeeId, newRole) => {
     let query = db.promise().query(`UPDATE employee SET role_id = ${newRole} WHERE id = ${employeeId}`);
+    return;
+}
+
+const eManagerUpdate = (employeeId, managerId) => {
+    let query = db.promise().query(`UPDATE employee SET manager_id = ${managerId} WHERE id = ${employeeId}`);
     return;
 }
 
